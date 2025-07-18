@@ -14,23 +14,27 @@ This server implements the Model Context Protocol to provide standardized access
 ## Features
 
 ### 🔍 **Check Management**
+
 - List all available Trusted Advisor checks with filtering
 - Get detailed information about specific checks
 - Support for multiple languages (en, ja, fr, zh)
 
 ### 📊 **Recommendations**
+
 - List and filter recommendations by various criteria
 - Get detailed recommendation information
 - Resource-level analysis and management
 - Lifecycle management (in progress, dismissed, resolved, etc.)
 
 ### 🏢 **Organization Support** (Enterprise Support Required)
+
 - Organization-wide recommendation aggregation
 - Multi-account resource management
 - Organization-level lifecycle management
 - Account-specific resource filtering
 
 ### ⚙️ **Resource Operations**
+
 - Batch exclusion/inclusion of resources
 - Resource status tracking
 - Metadata and detailed resource information
@@ -41,14 +45,18 @@ This server implements the Model Context Protocol to provide standardized access
 ### Legacy Support API Resources
 
 #### `list-trusted-advisor-checks`
+
 Lists all available Trusted Advisor checks using the legacy Support API.
+
 - **URI**: `trusted-advisor://checks`
 - **Parameters**: `language`, `awsAccountId`, `region`
 - **Filters**: Language-based filtering
 - **Requirements**: Business, Enterprise On-Ramp, or Enterprise Support plan
 
 #### `get-trusted-advisor-recommendation`
+
 Gets a specific recommendation using the legacy Support API.
+
 - **URI**: `trusted-advisor://recommendations/{checkId}`
 - **Parameters**: `checkId`, `language`, `awsAccountId`
 - **Requirements**: Business, Enterprise On-Ramp, or Enterprise Support plan
@@ -56,41 +64,53 @@ Gets a specific recommendation using the legacy Support API.
 ### Modern TrustedAdvisor API Resources
 
 #### `list-checks`
+
 List a filterable set of Trusted Advisor Checks.
+
 - **URI**: `trusted-advisor://checks/list`
 - **Parameters**: `awsService`, `pillar`, `source`, `maxResults`, `nextToken`, `language`, `awsAccountId`, `region`
 - **Filters**: AWS service, pillar, source
 - **Pagination**: Supported with `nextToken`
 
 #### `get-recommendation`
+
 Get a specific Trusted Advisor Recommendation.
+
 - **URI**: `trusted-advisor://recommendations/{recommendationIdentifier}`
 - **Parameters**: `recommendationIdentifier`, `language`, `awsAccountId`, `region`
 - **Response**: Detailed recommendation with lifecycle information
 
 #### `list-recommendations`
+
 List a filterable set of Trusted Advisor Recommendations.
+
 - **URI**: `trusted-advisor://recommendations`
 - **Parameters**: `awsService`, `pillar`, `source`, `status`, `maxResults`, `nextToken`, `language`, `awsAccountId`, `region`
 - **Filters**: AWS service, pillar, source, status
 - **Pagination**: Supported with `nextToken`
 
 #### `list-recommendation-resources`
+
 List Resources of a Trusted Advisor Recommendation.
+
 - **URI**: `trusted-advisor://recommendations/{recommendationIdentifier}/resources`
 - **Parameters**: `recommendationIdentifier`, `status`, `exclusionStatus`, `maxResults`, `nextToken`, `language`, `awsAccountId`, `region`
 - **Filters**: Resource status, exclusion status
 - **Pagination**: Supported with `nextToken`
 
 #### `update-recommendation-lifecycle`
+
 Update the lifecycle of a Trusted Advisor Recommendation.
+
 - **URI**: `trusted-advisor://recommendations/{recommendationIdentifier}/lifecycle`
 - **Parameters**: `recommendationIdentifier`, `lifecycleStage`, `updateReason`, `updateReasonCode`, `language`, `awsAccountId`, `region`
 - **Lifecycle Stages**: `pending_response`, `in_progress`, `dismissed`, `resolved`
 - **Note**: Only supports prioritized recommendations
 
 #### `batch-update-recommendation-resource-exclusion`
+
 Update one or more exclusion status for a list of recommendation resources.
+
 - **URI**: `trusted-advisor://recommendations/{recommendationIdentifier}/resource-exclusions`
 - **Parameters**: `recommendationIdentifier`, `resourceExclusions` (array), `language`, `awsAccountId`, `region`
 - **Batch Size**: Up to 100 resources per request
@@ -99,35 +119,45 @@ Update one or more exclusion status for a list of recommendation resources.
 ### Organization Resources (Enterprise Support Required)
 
 #### `list-organization-recommendations`
+
 List a filterable set of Recommendations within an Organization.
+
 - **URI**: `trusted-advisor://organizations/{organizationId}/recommendations`
 - **Parameters**: `organizationId`, `awsService`, `pillar`, `source`, `status`, `maxResults`, `nextToken`, `language`, `awsAccountId`, `region`
 - **Requirements**: Enterprise Support plan
 - **Note**: Only supports prioritized recommendations
 
 #### `get-organization-recommendation`
+
 Get a specific recommendation within an AWS Organizations organization.
+
 - **URI**: `trusted-advisor://organizations/{organizationId}/recommendations/{recommendationIdentifier}`
 - **Parameters**: `organizationId`, `recommendationIdentifier`, `language`, `awsAccountId`, `region`
 - **Requirements**: Enterprise Support plan
 - **Note**: Only supports prioritized recommendations
 
 #### `list-organization-recommendation-accounts`
+
 Lists the accounts that own the resources for an organization aggregate recommendation.
+
 - **URI**: `trusted-advisor://organizations/{organizationId}/recommendations/{recommendationIdentifier}/accounts`
 - **Parameters**: `organizationId`, `recommendationIdentifier`, `maxResults`, `nextToken`, `language`, `awsAccountId`, `region`
 - **Requirements**: Enterprise Support plan
 - **Note**: Only supports prioritized recommendations
 
 #### `list-organization-recommendation-resources`
+
 List Resources of a Recommendation within an Organization.
+
 - **URI**: `trusted-advisor://organizations/{organizationId}/recommendations/{recommendationIdentifier}/resources`
 - **Parameters**: `organizationId`, `recommendationIdentifier`, `status`, `exclusionStatus`, `affectedAccountId`, `maxResults`, `nextToken`, `language`, `awsAccountId`, `region`
 - **Requirements**: Enterprise Support plan
 - **Note**: Only supports prioritized recommendations
 
 #### `update-organization-recommendation-lifecycle`
+
 Update the lifecycle of a Recommendation within an Organization.
+
 - **URI**: `trusted-advisor://organizations/{organizationId}/recommendations/{recommendationIdentifier}/lifecycle`
 - **Parameters**: `organizationId`, `recommendationIdentifier`, `lifecycleStage`, `updateReason`, `updateReasonCode`, `language`, `awsAccountId`, `region`
 - **Requirements**: Enterprise Support plan
@@ -220,11 +250,80 @@ pnpm start
 
 This server is designed to be used with MCP-compatible clients. The server communicates via stdio and provides structured JSON responses for all operations.
 
-Example client usage:
-```typescript
-// The server will be available as a resource provider
-// providing access to all Trusted Advisor functionality
+### Configuration with AI Clients
+
+#### Claude Desktop
+
+Add this server to your Claude Desktop configuration file:
+
+**Location**: `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%/Claude/claude_desktop_config.json` (Windows)
+
+```json
+{
+  "mcpServers": {
+    "trusted-advisor": {
+      "command": "node",
+      "args": ["/path/to/mcp-trustedadvisor-server/build/main.js"],
+      "env": {
+        "AWS_REGION": "us-east-1",
+        "AWS_ACCESS_KEY_ID": "your_access_key",
+        "AWS_SECRET_ACCESS_KEY": "your_secret_key"
+      }
+    }
+  }
+}
 ```
+
+#### Amazon Q Developer
+
+Configure the MCP server in your Amazon Q Developer settings:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "trusted-advisor": {
+        "command": "node",
+        "args": ["/path/to/mcp-trustedadvisor-server/build/main.js"],
+        "environment": {
+          "AWS_REGION": "us-east-1",
+          "AWS_PROFILE": "your-aws-profile"
+        }
+      }
+    }
+  }
+}
+```
+
+#### Other MCP Clients
+
+For any MCP-compatible client, use these parameters:
+
+```bash
+# Command to run the server
+node /path/to/mcp-trustedadvisor-server/build/main.js
+
+# Required environment variables
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+
+# Optional environment variables
+AWS_PROFILE=your-profile
+AWS_SESSION_TOKEN=your_session_token
+```
+
+### Using the Server
+
+Once configured, you can ask your AI client to:
+
+- **List available checks**: "Show me all available Trusted Advisor checks"
+- **Get recommendations**: "What are the current Trusted Advisor recommendations for my account?"
+- **Check specific services**: "Show me cost optimization recommendations"
+- **Manage resources**: "Update the lifecycle status of recommendation xyz to resolved"
+- **Organization insights**: "List all recommendations across my organization"
+
+The AI client will automatically use the appropriate MCP resources based on your requests and provide structured responses with the Trusted Advisor data.
 
 ## Architecture
 
