@@ -3,6 +3,7 @@
 A Model Context Protocol (MCP) server that provides comprehensive access to AWS Trusted Advisor through both legacy Support API and modern TrustedAdvisor API endpoints.
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tomtapia/mcp-trustedadvisor-server)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 
 ## Overview
 
