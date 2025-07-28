@@ -91,7 +91,7 @@ describe('Integration: listChecks Resource', () => {
       
       expect(errorResponse).toHaveProperty('error');
       expect(errorResponse).toHaveProperty('details');
-      expect(errorResponse.details.errorType).toBe('CLIENT_ERROR');
+      expect(errorResponse.details.errorType).toBe('PERMISSION_ERROR');
       expect(errorResponse.details.isRetryable).toBe(false);
     });
   });

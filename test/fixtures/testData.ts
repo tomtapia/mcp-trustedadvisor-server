@@ -3,6 +3,9 @@
  * Provides realistic test data for different scenarios
  */
 
+// Simple test ID generator
+const generateTestId = () => `test-${Math.random().toString(36).substr(2, 9)}`;
+
 export const testData = {
   // Valid MCP parameters for different operations
   mcpParameters: {
@@ -132,7 +135,7 @@ export const testData = {
 
 // Helper functions for test data generation
 export const generateTestCheck = (overrides: Partial<any> = {}) => ({
-  id: testUtils.generateTestId(),
+  id: generateTestId(),
   name: 'Test Check',
   description: 'A test check for unit testing',
   pillars: ['security'],
@@ -142,7 +145,7 @@ export const generateTestCheck = (overrides: Partial<any> = {}) => ({
 });
 
 export const generateTestRecommendation = (overrides: Partial<any> = {}) => ({
-  id: testUtils.generateTestId(),
+  id: generateTestId(),
   checkId: 'test-check-id',
   type: 'standard',
   name: 'Test Recommendation',
@@ -157,9 +160,9 @@ export const generateTestRecommendation = (overrides: Partial<any> = {}) => ({
 });
 
 export const generateTestResource = (overrides: Partial<any> = {}) => ({
-  id: testUtils.generateTestId(),
-  arn: `arn:aws:ec2:us-east-1:123456789012:security-group/${testUtils.generateTestId()}`,
-  awsResourceId: testUtils.generateTestId(),
+  id: generateTestId(),
+  arn: `arn:aws:ec2:us-east-1:123456789012:security-group/${generateTestId()}`,
+  awsResourceId: generateTestId(),
   status: 'warning',
   lastUpdatedAt: new Date().toISOString(),
   metadata: {
