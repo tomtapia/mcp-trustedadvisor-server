@@ -12,7 +12,10 @@ module.exports = {
       '@semantic-release/npm',
       {
         npmPublish: true,
-        pkgRoot: '.'
+        pkgRoot: '.',
+        publishConfig: {
+          registry: 'https://npm.pkg.github.com'
+        }
       }
     ],
     [

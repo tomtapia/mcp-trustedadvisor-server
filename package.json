@@ -4,7 +4,7 @@
   "description": "MCP server for AWS Trusted Advisor - provides access to Trusted Advisor checks through the Model Context Protocol",
   "repository": "https://github.com/tomtapia/mcp-trustedadvisor-server.git",
   "publishConfig": {
-    "@tomtapia:registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com"
   },
   "main": "dist/main.js",
   "bin": {
