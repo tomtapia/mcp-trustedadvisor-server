@@ -1,0 +1,14 @@
+{
+  "mcp": {
+    "servers": {
+      "trusted-advisor": {
+        "command": "node",
+        "args": ["/path/to/mcp-trustedadvisor-server/dist/main.js"],
+        "environment": {
+          "AWS_REGION": "us-east-1",
+          "AWS_PROFILE": "your-aws-profile"
+        }
+      }
+    }
+  }
+}

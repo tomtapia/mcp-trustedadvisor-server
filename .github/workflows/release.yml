@@ -1,0 +1,38 @@
+name: Release Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write      # allows creating tags and releases
+      packages: write      # allows publishing packages to GitHub Packages
+      issues: write        # needed if @semantic-release/github comments on issues
+      pull-requests: write # needed if @semantic-release/github comments on PRs
+      id-token: write      # enables provenance signing (optional)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm run test
+
+      - name: Run semantic-release
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
